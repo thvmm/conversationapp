@@ -1,4 +1,4 @@
-package com.hop.nami.Activity;
+package com.hop.nami.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.os.Bundle;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
-import com.hop.nami.LoginActivity;
 
 /**
  * Created by Tiago on 25/10/2016.

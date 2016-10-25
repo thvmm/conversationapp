@@ -1,4 +1,4 @@
-package com.hop.nami.Adapter;
+package com.hop.nami.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hop.nami.Entity.ChatMessage;
+import com.hop.nami.entity.ChatMessage;
 import com.hop.nami.R;
 
 import java.util.ArrayList;
@@ -46,16 +46,14 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public synchronized View getView(int position, View convertView, ViewGroup parent) {
         ChatMessage message = (ChatMessage) chatMessageList.get(position);
-        View view = convertView;
+        View view = null;
 
-        if (convertView == null) {
-            if (message.isMine()) {
-                view = inflater.inflate(R.layout.chatbubble_user, null);
-            } else {
-                view = inflater.inflate(R.layout.chatbubble, null);
-            }
+        if (message.isMine()) {
+            view = inflater.inflate(R.layout.chatbubble_user, null);
+        } else {
+            view = inflater.inflate(R.layout.chatbubble, null);
         }
 
         TextView msg = (TextView) view.findViewById(R.id.message_text);

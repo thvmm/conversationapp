@@ -5,7 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.hop.nami.Activity.ChatActivity;
+import com.hop.nami.activity.ChatActivity;
 
 /**
  * Created by Tiago on 25/10/2016.

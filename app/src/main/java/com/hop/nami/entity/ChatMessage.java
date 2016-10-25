@@ -1,4 +1,4 @@
-package com.hop.nami.Entity;
+package com.hop.nami.entity;
 
 /**
  * Created by Tiago on 25/10/2016.

@@ -1,6 +1,7 @@
-package com.hop.nami.Activity;
+package com.hop.nami.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,9 +9,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.hop.nami.Adapter.ChatAdapter;
-import com.hop.nami.AsyncTask.RetriveWatsonResponse;
-import com.hop.nami.Entity.ChatMessage;
+import com.hop.nami.adapter.ChatAdapter;
+import com.hop.nami.asyncTask.RetriveWatsonResponse;
+import com.hop.nami.entity.ChatMessage;
 import com.hop.nami.HideKeyboardFocusChangeListener;
 import com.hop.nami.R;
 
@@ -72,14 +73,18 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             chatAdapter.add(chatMessage);
             chatAdapter.notifyDataSetChanged();
         }
-        String response = getWatsonResponse();
-        if (!response.equalsIgnoreCase("")) {
-            final ChatMessage chatMessage = new ChatMessage("demo", response, String.valueOf(random.nextInt(1000)), false);
-            chatMessage.setBody(response);
-            msgEditText.setText("");
-            chatAdapter.add(chatMessage);
-            chatAdapter.notifyDataSetChanged();
-        }
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                String response = getWatsonResponse();
+                if (!response.equalsIgnoreCase("")) {
+                    final ChatMessage chatMessage = new ChatMessage("demo", response, String.valueOf(random.nextInt(1000)), false);
+                    chatMessage.setBody(response);
+                    chatAdapter.add(chatMessage);
+                    chatAdapter.notifyDataSetChanged();
+                }
+            }
+        }, 1000);
     }
 
     private String getWatsonResponse() {
