@@ -1,21 +1,24 @@
 package com.hop.nami.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.hop.nami.adapter.ChatAdapter;
-import com.hop.nami.asyncTask.RetriveWatsonResponse;
-import com.hop.nami.entity.ChatMessage;
 import com.hop.nami.HideKeyboardFocusChangeListener;
 import com.hop.nami.R;
+import com.hop.nami.adapter.ChatAdapter;
+import com.hop.nami.asyncTask.WatsonConversationAsyncTask;
+import com.hop.nami.entity.ChatMessage;
+import com.hop.nami.util.ConversationServiceMessageUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
@@ -24,9 +27,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private EditText msgEditText;
     private ListView msgListView;
-
+    private Map<String, Object> conversationContext = new HashMap<>();
     private static ArrayList<ChatMessage> messages;
     private static ChatAdapter chatAdapter;
+
+    private WatsonConversationAsyncTask asyncTask;
 
 
     @Override
@@ -55,6 +60,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE
                 | ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
 
+
+        this.runWatsonConversationAsyncTask("Olá");
     }
 
     @Override
@@ -64,31 +71,21 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void sendTextMessage(View v) {
+    public void sendTextMessage(View view) {
         String message = msgEditText.getEditableText().toString();
         if (!message.equalsIgnoreCase("")) {
             final ChatMessage chatMessage = new ChatMessage("demo", message, String.valueOf(random.nextInt(1000)), true);
-            chatMessage.setBody(message);
             msgEditText.setText("");
             chatAdapter.add(chatMessage);
             chatAdapter.notifyDataSetChanged();
+
+            this.runWatsonConversationAsyncTask(message);
         }
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run() {
-                String response = getWatsonResponse();
-                if (!response.equalsIgnoreCase("")) {
-                    final ChatMessage chatMessage = new ChatMessage("demo", response, String.valueOf(random.nextInt(1000)), false);
-                    chatMessage.setBody(response);
-                    chatAdapter.add(chatMessage);
-                    chatAdapter.notifyDataSetChanged();
-                }
-            }
-        }, 1000);
     }
 
-    private String getWatsonResponse() {
-        new RetriveWatsonResponse().execute();
-        return "Olá, eu sou o Watson!";
+    private void runWatsonConversationAsyncTask(String message) {
+        Log.d("WATSON", "context PRECALL: " + conversationContext);
+        this.asyncTask = new WatsonConversationAsyncTask(chatAdapter, conversationContext);
+        this.asyncTask.execute(ConversationServiceMessageUtil.getInstance().createMessageFromText(message, conversationContext));
     }
 }
