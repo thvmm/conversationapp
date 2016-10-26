@@ -9,6 +9,7 @@ import com.ibm.watson.developer_cloud.conversation.v1.ConversationService;
 import com.ibm.watson.developer_cloud.conversation.v1.model.MessageRequest;
 import com.ibm.watson.developer_cloud.conversation.v1.model.MessageResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -64,8 +65,33 @@ public class WatsonConversationAsyncTask extends AsyncTask<MessageRequest, Objec
                 chatAdapter.add(chatMessage);
                 chatAdapter.notifyDataSetChanged();
             }
-
         }
+
+        Boolean retirveInformation = (Boolean) response.getContext().get("retrieveInformation");
+        if(retirveInformation!= null && retirveInformation){
+            List<String> features = new ArrayList<>();
+            String cores = response.getContext().get("cores").toString();
+            String tecido = response.getContext().get("tecido").toString();
+            String ocasiao = response.getContext().get("ocasiao").toString();
+            String categoria = response.getContext().get("categoria").toString();
+
+            if(!cores.equals("NOTHING")){
+                features.add(cores);
+            }
+            if(!tecido.equals("NOTHING")){
+                features.add(tecido);
+            }
+            if(!ocasiao.equals("NOTHING")){
+                features.add(ocasiao);
+            }
+            if(!categoria.equals("NOTHING")){
+                features.add(categoria);
+            }
+
+            RetrieveImageAsyncTask retrieveImageAsyncTask = new RetrieveImageAsyncTask(this.chatAdapter, this.context, features);
+            retrieveImageAsyncTask.execute();
+        }
+
         //Updating the context of the conversation
         this.context.clear();
         this.context.putAll(response.getContext());
