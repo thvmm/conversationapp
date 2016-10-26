@@ -19,7 +19,7 @@ import java.util.Random;
 
 public class WatsonConversationAsyncTask extends AsyncTask<MessageRequest, Object, MessageResponse> {
 
-    public static final String WORKSPACE_ID = "1970448a-cb3a-4859-9806-b8ec1d4cdfbb";
+    private static final String WORKSPACE_ID = "1970448a-cb3a-4859-9806-b8ec1d4cdfbb";
     private final static Random random = new Random();
     private final ChatAdapter chatAdapter;
     private Map<String, Object> context;
@@ -54,13 +54,17 @@ public class WatsonConversationAsyncTask extends AsyncTask<MessageRequest, Objec
     protected void onPostExecute(MessageResponse response) {
         super.onPostExecute(response);
         Log.d("WATSON", "context POSTCALL " + response.getContext());
-        final List<String> responseList = (List<String>) response.getOutput().get("text");
+        final List<String> responseList;
+        responseList = (List<String>) response.getOutput().get("text");
 
         if(responseList != null && responseList.size() > 0) {
-            final String text = responseList.get(0);
-            final ChatMessage chatMessage = new ChatMessage("demo", text, String.valueOf(random.nextInt(1000)), false);
-            chatAdapter.add(chatMessage);
-            chatAdapter.notifyDataSetChanged();
+            for(int i = 0; i < responseList.size(); i++){
+                final String text = responseList.get(i);
+                final ChatMessage chatMessage = new ChatMessage("demo", text, String.valueOf(random.nextInt(1000)), false);
+                chatAdapter.add(chatMessage);
+                chatAdapter.notifyDataSetChanged();
+            }
+
         }
         //Updating the context of the conversation
         this.context.clear();
