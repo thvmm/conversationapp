@@ -1,13 +1,16 @@
 package com.hop.nami.asyncTask;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.hop.nami.adapter.ChatAdapter;
 import com.hop.nami.entity.ChatMessage;
+import com.hop.nami.entity.ImageChatMessage;
 import com.ibm.watson.developer_cloud.conversation.v1.ConversationService;
 import com.ibm.watson.developer_cloud.conversation.v1.model.MessageRequest;
 import com.ibm.watson.developer_cloud.conversation.v1.model.MessageResponse;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +71,7 @@ public class WatsonConversationAsyncTask extends AsyncTask<MessageRequest, Objec
         }
 
         Boolean retirveInformation = (Boolean) response.getContext().get("retrieveInformation");
-        if(retirveInformation!= null && retirveInformation){
+        if(retirveInformation!= null && retirveInformation.equals(true)){
             List<String> features = new ArrayList<>();
             String cores = response.getContext().get("cores").toString();
             String tecido = response.getContext().get("tecido").toString();
@@ -88,8 +91,10 @@ public class WatsonConversationAsyncTask extends AsyncTask<MessageRequest, Objec
                 features.add(categoria);
             }
 
-            RetrieveImageAsyncTask retrieveImageAsyncTask = new RetrieveImageAsyncTask(this.chatAdapter, this.context, features);
-            retrieveImageAsyncTask.execute();
+            chatAdapter.add(new ImageChatMessage("FODASE", "", "FODASEAOQUADRADO", false));
+            //TODO Encontrar forma que busca url antes do comando this.context.putAll(response.getContext());
+            //RetrieveImageAsyncTask retrieveImageAsyncTask = new RetrieveImageAsyncTask(this.chatAdapter, this.context, features);
+            //retrieveImageAsyncTask.execute();
         }
 
         //Updating the context of the conversation

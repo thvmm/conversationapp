@@ -8,24 +8,24 @@
         android:id="@+id/imageView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/watson_logo_blue"/>
+        android:src="@drawable/watson_logo_blue" />
 
     <LinearLayout
         android:id="@+id/bubble_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bubble1"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bubble1">
 
         <TextView
             android:id="@+id/message_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxEms="12"
-            android:textSize="18sp"
             android:layout_gravity="center"
+            android:maxEms="12"
             android:text="Hi! new message"
-            android:textColor="@android:color/primary_text_light" />
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </LinearLayout>
