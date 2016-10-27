@@ -14,6 +14,7 @@ import com.hop.nami.R;
 import com.hop.nami.adapter.ChatAdapter;
 import com.hop.nami.asyncTask.WatsonConversationAsyncTask;
 import com.hop.nami.entity.ChatMessage;
+import com.hop.nami.entity.User;
 import com.hop.nami.util.ConversationServiceMessageUtil;
 
 import java.util.ArrayList;
@@ -71,8 +72,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void sendTextMessage(View view) {
+    public void sendTextMessage(final View view) {
         String message = msgEditText.getEditableText().toString();
+
+        Log.d("USER URL", "sendTextMessage: " + User.getCurrentUser().getPictureUrl());
+
         if (!message.equalsIgnoreCase("")) {
             final ChatMessage chatMessage = new ChatMessage("demo", message, String.valueOf(random.nextInt(1000)), true);
             msgEditText.setText("");

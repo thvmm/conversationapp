@@ -9,10 +9,12 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.hop.nami.R;
+import com.hop.nami.entity.User;
 
 /**
  * Created by Tiago on 25/10/2016.
@@ -30,7 +32,7 @@ public class LoginActivity extends FragmentActivity {
 
         setContentView(R.layout.login_screen);
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
+        loginButton.setReadPermissions("public_profile");
 
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -39,6 +41,7 @@ public class LoginActivity extends FragmentActivity {
                 Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
                 startActivity(intent);
                 finish();
+                User.loadUserInfo();
             }
 
             @Override

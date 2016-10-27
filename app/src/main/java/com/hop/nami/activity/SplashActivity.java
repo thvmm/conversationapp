@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
+import com.hop.nami.entity.User;
 
 /**
  * Created by Tiago on 25/10/2016.
@@ -39,6 +40,7 @@ public class SplashActivity extends Activity {
         Class<?> to;
         if (currentAccessToken != null) {
             to = ChatActivity.class;
+            User.loadUserInfo();
         } else {
             to = LoginActivity.class;
         }
