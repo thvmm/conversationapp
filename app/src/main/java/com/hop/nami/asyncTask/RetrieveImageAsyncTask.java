@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -25,20 +26,15 @@ import java.util.Random;
  * Created by Guilherme Moraes on 26/10/2016.
  */
 
-public class RetrieveImageAsyncTask extends AsyncTask {
+public class RetrieveImageAsyncTask extends AsyncTask<String, Object, String> {
 
     private ChatAdapter chatAdapter;
-    private Map<String, Object> context;
-    private List<String> features;
     private String service;
     private String endpoint;
     private JSONObject jsonObject;
-    private Drawable d;
 
-    public RetrieveImageAsyncTask(ChatAdapter chatAdapter, Map<String, Object> context, List<String> features) {
+    public RetrieveImageAsyncTask(ChatAdapter chatAdapter) {
         this.chatAdapter = chatAdapter;
-        this.context = context;
-        this.features = features;
         this.service = "https://namisearch-backend.mybluemix.net";
         this.endpoint = "/api/v1/search/product";
     }
@@ -49,9 +45,9 @@ public class RetrieveImageAsyncTask extends AsyncTask {
     }
 
     @Override
-    protected Object doInBackground(Object[] objects) {
+    protected String doInBackground(String[] params) {
         try {
-            URL url = new URL(this.urlBuilder(this.features));
+            URL url = new URL(this.urlBuilder(Arrays.asList(params)));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -64,6 +60,9 @@ public class RetrieveImageAsyncTask extends AsyncTask {
             bufferedReader.close();
             jsonObject = new JSONObject(String.valueOf(stringBuilder));
             URL imageUrl = new URL(jsonObject.get("imageUrl").toString());
+
+            return imageUrl.toString();
+
             //Está aqui a url da imagem que precisamos recuperar
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -76,61 +75,14 @@ public class RetrieveImageAsyncTask extends AsyncTask {
     }
 
     @Override
-    protected void onPostExecute(Object o) {
-        super.onPostExecute(o);
+    protected void onPostExecute(String url) {
+        super.onPostExecute(url);
 
-        ChatMessage imageChatMessage = new ImageChatMessage("user", "", String.valueOf(new Random().nextInt(1000)), false);
+        ImageChatMessage imageChatMessage = new ImageChatMessage("user", "", String.valueOf(new Random().nextInt(1000)), false);
+        imageChatMessage.setImageUrl(url);
         chatAdapter.add(imageChatMessage);
+        chatAdapter.notifyDataSetChanged();
 
-        this.context.clear();
-        //this.context.putAll(response.getContext())
-//            chatAdapter.notifyDataSetChanged();
-
-
-        /*
-        super.onPostExecute(response);
-        Log.d("WATSON", "context POSTCALL " + response.getContext());
-        final List<String> responseList;
-        responseList = (List<String>) response.getOutput().get("text");
-
-        if(responseList != null && responseList.size() > 0) {
-            for(int i = 0; i < responseList.size(); i++){
-                final String text = responseList.get(i);
-                final ChatMessage chatMessage = new ChatMessage("demo", text, String.valueOf(random.nextInt(1000)), false);
-                chatAdapter.add(chatMessage);
-                chatAdapter.notifyDataSetChanged();
-            }
-        }
-
-        Boolean retirveInformation = (Boolean) response.getContext().get("retrieveInformation");
-        if(retirveInformation!= null && retirveInformation){
-            List<String> features = new ArrayList<>();
-            String cores = response.getContext().get("cores").toString();
-            String tecido = response.getContext().get("tecido").toString();
-            String ocasiao = response.getContext().get("ocasiao").toString();
-            String categoria = response.getContext().get("categoria").toString();
-
-            if(!cores.equals("NOTHING")){
-                features.add(cores);
-            }
-            if(!tecido.equals("NOTHING")){
-                features.add(tecido);
-            }
-            if(!ocasiao.equals("NOTHING")){
-                features.add(ocasiao);
-            }
-            if(!categoria.equals("NOTHING")){
-                features.add(categoria);
-            }
-
-            RetrieveImageAsyncTask retrieveImageAsyncTask = new RetrieveImageAsyncTask(this.chatAdapter, this.context, features);
-            retrieveImageAsyncTask.execute();
-        }
-
-        //Updating the context of the conversation
-        this.context.clear();
-        this.context.putAll(response.getContext())
-         */
     }
 
     private String urlBuilder(List<String> features) {

@@ -90,11 +90,8 @@ public class WatsonConversationAsyncTask extends AsyncTask<MessageRequest, Objec
             if(!categoria.equals("NOTHING")){
                 features.add(categoria);
             }
-
-            chatAdapter.add(new ImageChatMessage("FODASE", "", "FODASEAOQUADRADO", false));
-            //TODO Encontrar forma que busca url antes do comando this.context.putAll(response.getContext());
-            //RetrieveImageAsyncTask retrieveImageAsyncTask = new RetrieveImageAsyncTask(this.chatAdapter, this.context, features);
-            //retrieveImageAsyncTask.execute();
+            RetrieveImageAsyncTask retrieveImageAsyncTask = new RetrieveImageAsyncTask(this.chatAdapter);
+            retrieveImageAsyncTask.execute(features.toArray(new String[features.size()]));
         }
 
         //Updating the context of the conversation

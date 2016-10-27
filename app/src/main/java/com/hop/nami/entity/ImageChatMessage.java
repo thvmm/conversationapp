@@ -18,6 +18,8 @@ import com.squareup.picasso.Picasso;
 
 public class ImageChatMessage extends ChatMessage {
 
+    private String imageUrl;
+
     public ImageChatMessage(String user, String messageString, String id, boolean isMINE) {
         super(user, messageString, id, isMINE);
     }
@@ -37,7 +39,7 @@ public class ImageChatMessage extends ChatMessage {
         }
 
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView5);
-        Picasso.with(activity).load("http://i.imgur.com/DvpvklR.png").into(imageView);
+        Picasso.with(activity).load(this.getImageUrl()).into(imageView);
         //imageView.setImageDrawable(drawable);
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.bubble_layout);
         LinearLayout parent_layout = (LinearLayout) view.findViewById(R.id.bubble_layout_parent);
@@ -55,5 +57,13 @@ public class ImageChatMessage extends ChatMessage {
         }
 
         return view;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
