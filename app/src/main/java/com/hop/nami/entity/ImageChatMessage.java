@@ -26,11 +26,10 @@ public class ImageChatMessage extends ChatMessage {
 
     @Override
     public View createView(Activity activity) {
-        LayoutInflater inflater = null;
-        View view = null;
-        inflater = (LayoutInflater) activity
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) activity
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);;
 
+        View view = null;
 
         if (this.isMine()) {
             view = inflater.inflate(R.layout.chat_bubble_image_user, null);
@@ -40,7 +39,7 @@ public class ImageChatMessage extends ChatMessage {
 
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView5);
         Picasso.with(activity).load(this.getImageUrl()).into(imageView);
-        //imageView.setImageDrawable(drawable);
+
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.bubble_layout);
         LinearLayout parent_layout = (LinearLayout) view.findViewById(R.id.bubble_layout_parent);
 

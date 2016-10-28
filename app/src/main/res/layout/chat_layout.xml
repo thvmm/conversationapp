@@ -23,7 +23,7 @@
         android:layout_alignParentLeft="true"
         android:background="#91f1f1f1"
         android:orientation="horizontal"
-        android:paddingBottom="2dp" >
+        android:paddingBottom="17dp" >
 
 
         <EditText
@@ -47,6 +47,14 @@
             android:background="@drawable/send_button"
             android:text="d" />
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:gravity="center_horizontal"
+        android:paddingBottom="2dp"
+        android:text="@string/poweredBy"/>
 
 
 </RelativeLayout>

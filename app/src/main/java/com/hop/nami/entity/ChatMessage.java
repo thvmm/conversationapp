@@ -9,10 +9,13 @@ import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hop.nami.CircleTransform;
 import com.hop.nami.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.Random;
 
@@ -78,6 +81,11 @@ public class ChatMessage {
 
         if (this.isMine()) {
             view = inflater.inflate(R.layout.chatbubble_user, null);
+            Picasso.with(view.getContext())
+                    .load(User.getCurrentUser().getPictureUrl())
+                    .resize(100,100)
+                    .transform(new CircleTransform())
+                    .into((ImageView) view.findViewById(R.id.imageView3));
         } else {
             view = inflater.inflate(R.layout.chatbubble, null);
         }
