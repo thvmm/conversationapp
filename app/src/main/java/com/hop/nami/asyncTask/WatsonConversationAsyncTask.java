@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class WatsonConversationAsyncTask extends AsyncTask<MessageRequest, Object, MessageResponse> {
 
-    private static final String WORKSPACE_ID = "1970448a-cb3a-4859-9806-b8ec1d4cdfbb";
+    private static final String WORKSPACE_ID = "#WORKSPACE_ID#";
     private final static Random random = new Random();
     private final ChatAdapter chatAdapter;
     private Map<String, Object> context;
@@ -40,7 +40,7 @@ public class WatsonConversationAsyncTask extends AsyncTask<MessageRequest, Objec
         super.onPreExecute();
 
         this.conversationService = new ConversationService("2016-09-20");
-        this.conversationService.setUsernameAndPassword("2d7b83e3-8a8a-44a6-8bfa-1963c0a976b5", "VJHOOZvLEQy5");
+        this.conversationService.setUsernameAndPassword("user", "pass");
     }
 
     @Override
